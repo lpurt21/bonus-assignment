@@ -8,14 +8,27 @@ import java.util.List;
 public class MultiplyProcedure implements Procedure {
     @Override
     public Object apply(List<Object> args, Environment env) {
+        int productInt = 1;
+        double productDouble = 1.0;
+        boolean hasDouble = false;
 
-        int product = 1;
-        for(Object arg : args) {
-            if(!(arg instanceof Integer)) {
-                throw new RuntimeException("argument is not an integer");
+        for (Object arg : args) {
+            if (!(arg instanceof Number)) {
+                throw new RuntimeException("Invalid argument type for *: " + arg);
             }
-            product *= (Integer) arg;
+
+            if (arg instanceof Double || arg instanceof Float) {
+                hasDouble = true;
+                productDouble *= ((Number) arg).doubleValue();
+            } else {
+                productInt *= ((Number) arg).intValue();
+            }
         }
-        return product;
+
+        if (hasDouble) {
+            return productDouble * productInt;
+        } else {
+            return productInt;
+        }
     }
 }

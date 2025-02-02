@@ -17,18 +17,29 @@ public class MinusProcedure implements Procedure {
         }
 
         double result = ((Number) args.get(0)).doubleValue();
+        boolean hasDouble = false;
 
         if (args.size() == 1) {
-            return -result;
+            return -(int) result;
         }
 
         for (int i = 1; i < args.size(); i++) {
             if (!(args.get(i) instanceof Number)) {
                 throw new RuntimeException("Invalid argument type for -: " + args.get(i));
             }
-            result -= ((Number) args.get(i)).doubleValue();
+
+            if (args.get(i) instanceof Double || args.get(i) instanceof Float) {
+                hasDouble = true;
+            }
+
+            double currentValue = ((Number) args.get(i)).doubleValue();
+            result -= currentValue;
         }
 
-        return result;
+        if (hasDouble) {
+            return result;
+        } else {
+            return (int) result;
+        }
     }
 }
